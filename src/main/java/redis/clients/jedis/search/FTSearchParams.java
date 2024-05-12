@@ -43,9 +43,16 @@ public class FTSearchParams implements IParams {
   private Map<String, Object> params;
   private Integer dialect;
 
+  /**
+  * Default constructor for FTSearchParams.
+  */
   public FTSearchParams() {
   }
 
+  /**
+  * Create and return a new instance of FTSearchParams.
+  * @return FTSearchParams instance
+  */
   public static FTSearchParams searchParams() {
     return new FTSearchParams();
   }
@@ -157,6 +164,10 @@ public class FTSearchParams implements IParams {
    *
    * @return the query itself
    */
+  /**
+  * Set the query not to return the contents of documents, and rather just return the ids.
+  * @return the query itself
+  */
   public FTSearchParams noContent() {
     this.noContent = true;
     return this;
@@ -167,6 +178,10 @@ public class FTSearchParams implements IParams {
    *
    * @return the query object
    */
+  /**
+  * Set the query to verbatim mode, disabling stemming and query expansion.
+  * @return the query object
+  */
   public FTSearchParams verbatim() {
     this.verbatim = true;
     return this;
@@ -177,6 +192,10 @@ public class FTSearchParams implements IParams {
    *
    * @return the query object
    */
+  /**
+  * Set the query not to filter for stopwords. In general this should not be used.
+  * @return the query object
+  */
   public FTSearchParams noStopwords() {
     this.noStopwords = true;
     return this;
@@ -188,28 +207,67 @@ public class FTSearchParams implements IParams {
    *
    * @return the query object itself
    */
+  /**
+  * Set the query to return a factored score for each result. This is useful to merge results from multiple queries.
+  * @return the query object itself
+  */
   public FTSearchParams withScores() {
     this.withScores = true;
     return this;
   }
 
+  /**
+  * Add a numeric filter based on the range of values for the given field.
+  * @param field The field name
+  * @param min The minimum value
+  * @param max The maximum value
+  * @return the query object
+  */
   public FTSearchParams filter(String field, double min, double max) {
     return filter(new NumericFilter(field, min, max));
   }
 
+  /**
+  * Add a numeric filter based on the range of values for the given field with exclusivity options.
+  * @param field The field name
+  * @param min The minimum value
+  * @param exclusiveMin Whether the minimum value is exclusive
+  * @param max The maximum value
+  * @param exclusiveMax Whether the maximum value is exclusive
+  * @return the query object
+  */
   public FTSearchParams filter(String field, double min, boolean exclusiveMin, double max, boolean exclusiveMax) {
     return filter(new NumericFilter(field, min, exclusiveMin, max, exclusiveMax));
   }
 
+  /**
+  * Add a numeric filter based on the provided NumericFilter.
+  * @param numericFilter The NumericFilter object
+  * @return the query object
+  */
   public FTSearchParams filter(NumericFilter numericFilter) {
     filters.add(numericFilter);
     return this;
   }
 
+  /**
+  * Add a geographical filter based on the specified field, coordinates, radius, and unit.
+  * @param field The field name
+  * @param lon The longitude
+  * @param lat The latitude
+  * @param radius The radius
+  * @param unit The unit of radius
+  * @return the query object
+  */
   public FTSearchParams geoFilter(String field, double lon, double lat, double radius, GeoUnit unit) {
     return geoFilter(new GeoFilter(field, lon, lat, radius, unit));
   }
 
+  /**
+  * Add a geographical filter based on the provided GeoFilter.
+  * @param geoFilter The GeoFilter object
+  * @return the query object
+  */
   public FTSearchParams geoFilter(GeoFilter geoFilter) {
     filters.add(geoFilter);
     return this;
@@ -221,10 +279,20 @@ public class FTSearchParams implements IParams {
    * @param keys a list of TEXT fields in the schemas
    * @return the query object itself
    */
+  /**
+  * Limit the query to results that are limited to a specific set of keys.
+  * @param keys A list of TEXT fields in the schemas
+  * @return the query object itself
+  */
   public FTSearchParams inKeys(String... keys) {
     return inKeys(Arrays.asList(keys));
   }
 
+  /**
+  * Limit the query to results that are limited to a specific set of keys.
+  * @param keys A collection of TEXT fields in the schemas
+  * @return the query object itself
+  */
   public FTSearchParams inKeys(Collection<String> keys) {
     this.inKeys = keys;
     return this;
@@ -236,10 +304,20 @@ public class FTSearchParams implements IParams {
    * @param fields a list of TEXT fields in the schemas
    * @return the query object itself
    */
+  /**
+  * Limit the query to results that are limited to a specific set of fields.
+  * @param fields A list of TEXT fields in the schemas
+  * @return the query object itself
+  */
   public FTSearchParams inFields(String... fields) {
     return inFields(Arrays.asList(fields));
   }
 
+  /**
+  * Limit the query to results that are limited to a specific set of fields.
+  * @param fields A collection of TEXT fields in the schemas
+  * @return the query object itself
+  */
   public FTSearchParams inFields(Collection<String> fields) {
     if (this.inFields == null) {
       this.inFields = new ArrayList<>(fields);
@@ -255,6 +333,11 @@ public class FTSearchParams implements IParams {
    * @param fields a list of TEXT fields in the schemas
    * @return the query object itself
    */
+  /**
+  * Result's projection - the fields to return by the query.
+  * @param fields A list of TEXT fields in the schemas
+  * @return the query object itself
+  */
   public FTSearchParams returnFields(String... fields) {
     if (returnFieldNames != null) {
       Arrays.stream(fields).forEach(f -> returnFieldNames.add(FieldName.of(f)));
@@ -267,16 +350,31 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
+  /**
+  * Add a single field to the list of fields to return in the query.
+  * @param field The field name to return
+  * @return the query object
+  */
   public FTSearchParams returnField(FieldName field) {
     initReturnFieldNames();
     returnFieldNames.add(field);
     return this;
   }
 
+  /**
+  * Result's projection - the fields to return by the query.
+  * @param fields An array of FieldName objects
+  * @return the query object itself
+  */
   public FTSearchParams returnFields(FieldName... fields) {
     return returnFields(Arrays.asList(fields));
   }
 
+  /**
+  * Result's projection - the fields to return by the query.
+  * @param fields A collection of FieldName objects
+  * @return the query object itself
+  */
   public FTSearchParams returnFields(Collection<FieldName> fields) {
     initReturnFieldNames();
     returnFieldNames.addAll(fields);
@@ -293,21 +391,39 @@ public class FTSearchParams implements IParams {
     }
   }
 
+  /**
+  * Enable summarization of results in the query.
+  * @return the query object itself
+  */
   public FTSearchParams summarize() {
     this.summarize = true;
     return this;
   }
 
+  /**
+  * Enable summarization of results in the query with custom parameters.
+  * @param summarizeParams The SummarizeParams object
+  * @return the query object itself
+  */
   public FTSearchParams summarize(SummarizeParams summarizeParams) {
     this.summarizeParams = summarizeParams;
     return this;
   }
 
+  /**
+  * Enable highlighting of results in the query.
+  * @return the query object itself
+  */
   public FTSearchParams highlight() {
     this.highlight = true;
     return this;
   }
 
+  /**
+  * Enable highlighting of results in the query with custom parameters.
+  * @param highlightParams The HighlightParams object
+  * @return the query object itself
+  */
   public FTSearchParams highlight(HighlightParams highlightParams) {
     this.highlightParams = highlightParams;
     return this;
@@ -322,6 +438,12 @@ public class FTSearchParams implements IParams {
    *
    * @return the query object itself
    */
+  /**
+  * Set the query custom scorer.
+  * See http://redisearch.io for documentation on extending RediSearch
+  * @param scorer A custom scorer
+  * @return the query object itself
+  */
   public FTSearchParams scorer(String scorer) {
     this.scorer = scorer;
     return this;
@@ -332,16 +454,30 @@ public class FTSearchParams implements IParams {
 //    return this;
 //  }
 
+  /**
+  * Set the slop value for the query.
+  * @param slop The slop value
+  * @return the query object itself
+  */
   public FTSearchParams slop(int slop) {
     this.slop = slop;
     return this;
   }
 
+  /**
+  * Set the timeout for the query.
+  * @param timeout The timeout value
+  * @return the query object itself
+  */
   public FTSearchParams timeout(long timeout) {
     this.timeout = timeout;
     return this;
   }
 
+  /**
+  * Set the query to be executed in order.
+  * @return the query object itself
+  */
   public FTSearchParams inOrder() {
     this.inOrder = true;
     return this;
@@ -356,6 +492,12 @@ public class FTSearchParams implements IParams {
    *
    * @return the query object itself
    */
+  /**
+  * Set the query language for stemming purposes.
+  * See http://redisearch.io for documentation on languages and stemming
+  * @param language A language
+  * @return the query object itself
+  */
   public FTSearchParams language(String language) {
     this.language = language;
     return this;
@@ -368,6 +510,12 @@ public class FTSearchParams implements IParams {
    * @param order the sorting order
    * @return the query object itself
    */
+  /**
+  * Set the query to be sorted by a Sortable field defined in the schema.
+  * @param sortBy The sorting field's name
+  * @param order The sorting order
+  * @return the query object itself
+  */
   public FTSearchParams sortBy(String sortBy, SortingOrder order) {
     this.sortBy = sortBy;
     this.sortOrder = order;
@@ -381,6 +529,12 @@ public class FTSearchParams implements IParams {
    * @param num how many results we want to show
    * @return the query itself, for builder-style syntax
    */
+  /**
+  * Limit the results to a certain offset and limit.
+  * @param offset The first result to show, zero based indexing
+  * @param num How many results we want to show
+  * @return the query itself, for builder-style syntax
+  */
   public FTSearchParams limit(int offset, int num) {
     this.limit = new int[]{offset, num};
     return this;
@@ -395,6 +549,15 @@ public class FTSearchParams implements IParams {
    * @param value can be String, long or float
    * @return the query object itself
    */
+  /**
+  * Add a parameter to the query.
+  * Parameters can be referenced in the query string by a $, followed by the parameter name,
+  * e.g., $user, and each such reference in the search query to a parameter name is substituted
+  * by the corresponding parameter value.
+  * @param name The name of the parameter
+  * @param value The value of the parameter
+  * @return the query object itself
+  */
   public FTSearchParams addParam(String name, Object value) {
     if (params == null) {
       params = new HashMap<>();
@@ -403,6 +566,11 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
+  /**
+  * Add multiple parameters to the query.
+  * @param paramValues A map of parameter names and values
+  * @return the query object itself
+  */
   public FTSearchParams params(Map<String, Object> paramValues) {
     if (this.params == null) {
       this.params = new HashMap<>(paramValues);
@@ -418,6 +586,11 @@ public class FTSearchParams implements IParams {
    * @param dialect integer
    * @return the query object itself
    */
+  /**
+  * Set the dialect version to execute the query accordingly.
+  * @param dialect The dialect version
+  * @return the query object itself
+  */
   public FTSearchParams dialect(int dialect) {
     this.dialect = dialect;
     return this;
@@ -429,6 +602,11 @@ public class FTSearchParams implements IParams {
    * @return this
    */
   @Internal
+  /**
+  * Set the dialect version to execute the query accordingly if it has not been already set.
+  * @param dialect The dialect version
+  * @return this
+  */
   public FTSearchParams dialectOptional(int dialect) {
     if (dialect != 0 && this.dialect == null) {
       this.dialect = dialect;
@@ -436,10 +614,18 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
+  /**
+  * Get the current setting of 'noContent' flag.
+  * @return the value of 'noContent' flag
+  */
   public boolean getNoContent() {
     return noContent;
   }
 
+  /**
+  * Get the current setting of 'withScores' flag.
+  * @return the value of 'withScores' flag
+  */
   public boolean getWithScores() {
     return withScores;
   }
@@ -447,6 +633,9 @@ public class FTSearchParams implements IParams {
   /**
    * NumericFilter wraps a range filter on a numeric field. It can be inclusive or exclusive
    */
+  /**
+  * NumericFilter wraps a range filter on a numeric field. It can be inclusive or exclusive.
+  */
   public static class NumericFilter implements IParams {
 
     private final String field;
@@ -482,6 +671,9 @@ public class FTSearchParams implements IParams {
   /**
    * GeoFilter encapsulates a radius filter on a geographical indexed fields
    */
+  /**
+  * GeoFilter encapsulates a radius filter on a geographical indexed fields.
+  */
   public static class GeoFilter implements IParams {
 
     private final String field;
@@ -506,6 +698,9 @@ public class FTSearchParams implements IParams {
     }
   }
 
+  /**
+  * SummarizeParams represents parameters for result summarization.
+  */
   public static class SummarizeParams implements IParams {
 
     private Collection<String> fields;
@@ -559,10 +754,17 @@ public class FTSearchParams implements IParams {
     }
   }
 
+  /**
+  * Create and return a new instance of SummarizeParams.
+  * @return SummarizeParams instance
+  */
   public static SummarizeParams summarizeParams() {
     return new SummarizeParams();
   }
 
+  /**
+  * HighlightParams represents parameters for result highlighting.
+  */
   public static class HighlightParams implements IParams {
 
     private Collection<String> fields;
@@ -598,6 +800,10 @@ public class FTSearchParams implements IParams {
     }
   }
 
+  /**
+  * Create and return a new instance of HighlightParams.
+  * @return HighlightParams instance
+  */
   public static HighlightParams highlightParams() {
     return new HighlightParams();
   }
