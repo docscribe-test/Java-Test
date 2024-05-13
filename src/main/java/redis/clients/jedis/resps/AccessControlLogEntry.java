@@ -1,7 +1,6 @@
 package redis.clients.jedis.resps;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -97,22 +96,6 @@ public class AccessControlLogEntry implements Serializable {
 
   public long getTimestampLastUpdated() {
     return timestampLastUpdated;
-  }
-
-  /**
-   * Convert the client-info string into a Map of String. When the value is empty, the value in the
-   * map is set to an empty string The key order is maintained to reflect the string return by Redis
-   * @param clientInfo
-   * @return A Map with all client info
-   */
-  private Map<String, String> getMapFromRawClientInfo(String clientInfo) {
-    String[] entries = clientInfo.split(" ");
-    Map<String, String> clientInfoMap = new LinkedHashMap<>(entries.length);
-    for (String entry : entries) {
-      String[] kvArray = entry.split("=");
-      clientInfoMap.put(kvArray[0], (kvArray.length == 2) ? kvArray[1] : "");
-    }
-    return clientInfoMap;
   }
 
   @Override
