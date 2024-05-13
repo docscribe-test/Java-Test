@@ -87,6 +87,11 @@ public class ShardedConnectionProvider implements ConnectionProvider {
   * @param node Node to setup.
   * @return The existing or new connection pool.
   */
+  /**
+   * Setup a node if it does not exist.
+   * @param node Node to setup.
+   * @return The existing or new connection pool.
+   */
   private ConnectionPool setupNodeIfNotExist(final HostAndPort node) {
     String nodeKey = node.toString();
     ConnectionPool existingPool = resources.get(nodeKey);
@@ -109,6 +114,9 @@ public class ShardedConnectionProvider implements ConnectionProvider {
   /**
   * Reset the ShardedConnectionProvider by clearing resources and nodes.
   */
+  /**
+   * Reset the ShardedConnectionProvider by clearing resources and nodes.
+   */
   private void reset() {
     for (ConnectionPool pool : resources.values()) {
       try {
@@ -213,6 +221,11 @@ public class ShardedConnectionProvider implements ConnectionProvider {
   * @param hash Hash of the node.
   * @return Node corresponding to the hash.
   */
+  /**
+   * Get a node from a hash.
+   * @param hash Hash of the node.
+   * @return Node corresponding to the hash.
+   */
   private HostAndPort getNodeFromHash(Long hash) {
     SortedMap<Long, HostAndPort> tail = nodes.tailMap(hash);
     if (tail.isEmpty()) {

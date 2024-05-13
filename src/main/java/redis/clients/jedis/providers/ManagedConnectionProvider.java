@@ -7,6 +7,10 @@ import redis.clients.jedis.Connection;
 * This is a ManagedConnectionProvider class that implements the ConnectionProvider interface.
 * It is responsible for managing connections.
 */
+/**
+* This is a ManagedConnectionProvider class that implements the ConnectionProvider interface.
+* It is responsible for managing connections.
+*/
 public class ManagedConnectionProvider implements ConnectionProvider {
 
   private Connection connection;
