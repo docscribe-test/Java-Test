@@ -37,6 +37,10 @@ public class AccessControlLogEntry implements Serializable {
   private final long timestampCreated;
   private final long timestampLastUpdated;
 
+  /**
+   * Constructs a new AccessControlLogEntry object with the given map.
+   * @param map The map containing key-value pairs for initialization.
+  */
   public AccessControlLogEntry(Map<String, Object> map) {
     count = (long) map.get(COUNT);
     reason = (String) map.get(REASON);

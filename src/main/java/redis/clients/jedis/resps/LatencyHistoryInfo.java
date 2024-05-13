@@ -22,10 +22,19 @@ public class LatencyHistoryInfo {
         return latency;
     }
     
+    /**
+    * Returns the latency in seconds.
+    * @return The latency in seconds.
+    */
     public double getLatencySeconds() {
         return latency / 1000.0;
     }
 
+    /**
+    * Builder for creating LatencyHistoryInfo objects.
+    * @param data The input data to build the object.
+    * @return A new LatencyHistoryInfo object.
+    */
     public static final Builder<LatencyHistoryInfo> LATENCY_HISTORY_BUILDER = new Builder<LatencyHistoryInfo>() {
         @Override
         public LatencyHistoryInfo build(Object data) {
