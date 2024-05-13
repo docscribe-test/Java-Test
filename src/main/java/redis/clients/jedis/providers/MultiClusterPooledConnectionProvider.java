@@ -121,6 +121,11 @@ public class MultiClusterPooledConnectionProvider implements ConnectionProvider 
         this.fallbackExceptionList = multiClusterClientConfig.getFallbackExceptionList();
     }
 
+    /**
+    * Increments the active multi-cluster index.
+    * Synchronizes field-level to avoid edge cases.
+    * @return The updated active multi-cluster index.
+    */
     public int incrementActiveMultiClusterIndex() {
 
         // Field-level synchronization is used to avoid the edge case in which
@@ -153,6 +158,10 @@ public class MultiClusterPooledConnectionProvider implements ConnectionProvider 
         return activeMultiClusterIndex;
     }
 
+    /**
+    * Validates the target connection for the specified multi-cluster index.
+    * @param multiClusterIndex The index of the multi-cluster.
+    */
     public void validateTargetConnection(int multiClusterIndex) {
 
         CircuitBreaker circuitBreaker = getClusterCircuitBreaker(multiClusterIndex);
@@ -177,6 +186,11 @@ public class MultiClusterPooledConnectionProvider implements ConnectionProvider 
         }
     }
 
+    /**
+    * Sets the active multi-cluster index.
+    * Field-level synchronization is used to avoid edge cases.
+    * @param multiClusterIndex The index of the multi-cluster to set as active.
+    */
     public synchronized void setActiveMultiClusterIndex(int multiClusterIndex) {
 
         // Field-level synchronization is used to avoid the edge case in which
