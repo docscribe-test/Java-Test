@@ -18,6 +18,10 @@ public class TSElement {
     return value;
   }
 
+  public long diff(TSElement other) {
+    return this.timestamp - other.timestamp;
+  }
+
   @Override
   public int hashCode() {
     return 31 * Long.hashCode(timestamp) + Long.hashCode(Double.doubleToLongBits(value));

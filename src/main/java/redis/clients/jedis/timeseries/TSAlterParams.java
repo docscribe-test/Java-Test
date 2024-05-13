@@ -1,11 +1,15 @@
 package redis.clients.jedis.timeseries;
 
 import static redis.clients.jedis.Protocol.toByteArray;
-import static redis.clients.jedis.timeseries.TimeSeriesProtocol.TimeSeriesKeyword.*;
+import static redis.clients.jedis.timeseries.TimeSeriesProtocol.TimeSeriesKeyword.CHUNK_SIZE;
+import static redis.clients.jedis.timeseries.TimeSeriesProtocol.TimeSeriesKeyword.DUPLICATE_POLICY;
+import static redis.clients.jedis.timeseries.TimeSeriesProtocol.TimeSeriesKeyword.LABELS;
+import static redis.clients.jedis.timeseries.TimeSeriesProtocol.TimeSeriesKeyword.RETENTION;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import redis.clients.jedis.CommandArguments;
 import redis.clients.jedis.params.IParams;
 
@@ -36,16 +40,6 @@ public class TSAlterParams implements IParams {
     return this;
   }
 
-  public TSAlterParams duplicatePolicy(DuplicatePolicy duplicatePolicy) {
-    this.duplicatePolicy = duplicatePolicy;
-    return this;
-  }
-
-  public TSAlterParams labels(Map<String, String> labels) {
-    this.labels = labels;
-    return this;
-  }
-
   public TSAlterParams label(String label, String value) {
     if (this.labels == null) {
       this.labels = new LinkedHashMap<>();
@@ -56,6 +50,11 @@ public class TSAlterParams implements IParams {
 
   public TSAlterParams labelsReset() {
     return this.labels(Collections.emptyMap());
+  }
+
+  public TSAlterParams labels(Map<String, String> labels) {
+    this.labels = labels;
+    return this;
   }
 
   @Override
