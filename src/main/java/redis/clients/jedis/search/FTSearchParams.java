@@ -1,8 +1,39 @@
 package redis.clients.jedis.search;
 
-import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.*;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.DIALECT;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.EXPANDER;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.FIELDS;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.FILTER;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.FRAGS;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.GEOFILTER;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.HIGHLIGHT;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.INFIELDS;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.INKEYS;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.INORDER;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.LANGUAGE;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.LEN;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.LIMIT;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.NOCONTENT;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.NOSTOPWORDS;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.PARAMS;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.RETURN;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.SCORER;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.SEPARATOR;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.SLOP;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.SORTBY;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.SUMMARIZE;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.TAGS;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.TIMEOUT;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.VERBATIM;
+import static redis.clients.jedis.search.SearchProtocol.SearchKeyword.WITHSCORES;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import redis.clients.jedis.CommandArguments;
 import redis.clients.jedis.Protocol;
@@ -12,9 +43,6 @@ import redis.clients.jedis.args.SortingOrder;
 import redis.clients.jedis.params.IParams;
 import redis.clients.jedis.util.LazyRawable;
 
-/**
- * Query represents query parameters and filters to load results from the engine
- */
 public class FTSearchParams implements IParams {
 
   private boolean noContent = false;
@@ -152,42 +180,21 @@ public class FTSearchParams implements IParams {
     }
   }
 
-  /**
-   * Set the query not to return the contents of documents, and rather just return the ids
-   *
-   * @return the query itself
-   */
   public FTSearchParams noContent() {
     this.noContent = true;
     return this;
   }
 
-  /**
-   * Set the query to verbatim mode, disabling stemming and query expansion
-   *
-   * @return the query object
-   */
   public FTSearchParams verbatim() {
     this.verbatim = true;
     return this;
   }
 
-  /**
-   * Set the query not to filter for stopwords. In general this should not be used
-   *
-   * @return the query object
-   */
   public FTSearchParams noStopwords() {
     this.noStopwords = true;
     return this;
   }
 
-  /**
-   * Set the query to return a factored score for each results. This is useful to merge results from
-   * multiple queries.
-   *
-   * @return the query object itself
-   */
   public FTSearchParams withScores() {
     this.withScores = true;
     return this;
@@ -215,12 +222,6 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
-  /**
-   * Limit the query to results that are limited to a specific set of keys
-   *
-   * @param keys a list of TEXT fields in the schemas
-   * @return the query object itself
-   */
   public FTSearchParams inKeys(String... keys) {
     return inKeys(Arrays.asList(keys));
   }
@@ -230,12 +231,6 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
-  /**
-   * Limit the query to results that are limited to a specific set of fields
-   *
-   * @param fields a list of TEXT fields in the schemas
-   * @return the query object itself
-   */
   public FTSearchParams inFields(String... fields) {
     return inFields(Arrays.asList(fields));
   }
@@ -249,12 +244,6 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
-  /**
-   * Result's projection - the fields to return by the query
-   *
-   * @param fields a list of TEXT fields in the schemas
-   * @return the query object itself
-   */
   public FTSearchParams returnFields(String... fields) {
     if (returnFieldNames != null) {
       Arrays.stream(fields).forEach(f -> returnFieldNames.add(FieldName.of(f)));
@@ -347,54 +336,22 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
-  /**
-   * Set the query language, for stemming purposes
-   * <p>
-   * See http://redisearch.io for documentation on languages and stemming
-   *
-   * @param language a language.
-   *
-   * @return the query object itself
-   */
   public FTSearchParams language(String language) {
     this.language = language;
     return this;
   }
 
-  /**
-   * Set the query to be sorted by a Sortable field defined in the schema
-   *
-   * @param sortBy the sorting field's name
-   * @param order the sorting order
-   * @return the query object itself
-   */
   public FTSearchParams sortBy(String sortBy, SortingOrder order) {
     this.sortBy = sortBy;
     this.sortOrder = order;
     return this;
   }
 
-  /**
-   * Limit the results to a certain offset and limit
-   *
-   * @param offset the first result to show, zero based indexing
-   * @param num how many results we want to show
-   * @return the query itself, for builder-style syntax
-   */
   public FTSearchParams limit(int offset, int num) {
     this.limit = new int[]{offset, num};
     return this;
   }
 
-  /**
-   * Parameters can be referenced in the query string by a $ , followed by the parameter name,
-   * e.g., $user , and each such reference in the search query to a parameter name is substituted
-   * by the corresponding parameter value.
-   *
-   * @param name
-   * @param value can be String, long or float
-   * @return the query object itself
-   */
   public FTSearchParams addParam(String name, Object value) {
     if (params == null) {
       params = new HashMap<>();
@@ -412,22 +369,11 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
-  /**
-   * Set the dialect version to execute the query accordingly
-   *
-   * @param dialect integer
-   * @return the query object itself
-   */
   public FTSearchParams dialect(int dialect) {
     this.dialect = dialect;
     return this;
   }
 
-  /**
-   * This method will not replace the dialect if it has been already set.
-   * @param dialect dialect
-   * @return this
-   */
   @Internal
   public FTSearchParams dialectOptional(int dialect) {
     if (dialect != 0 && this.dialect == null) {
@@ -444,9 +390,6 @@ public class FTSearchParams implements IParams {
     return withScores;
   }
 
-  /**
-   * NumericFilter wraps a range filter on a numeric field. It can be inclusive or exclusive
-   */
   public static class NumericFilter implements IParams {
 
     private final String field;
@@ -479,9 +422,6 @@ public class FTSearchParams implements IParams {
     }
   }
 
-  /**
-   * GeoFilter encapsulates a radius filter on a geographical indexed fields
-   */
   public static class GeoFilter implements IParams {
 
     private final String field;
