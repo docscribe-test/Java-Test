@@ -43,9 +43,16 @@ public class FTSearchParams implements IParams {
   private Map<String, Object> params;
   private Integer dialect;
 
+  /**
+   * Constructs a new FTSearchParams object.
+   */
   public FTSearchParams() {
   }
 
+  /**
+   * Creates and returns a new FTSearchParams object.
+   * @return a new FTSearchParams object
+   */
   public static FTSearchParams searchParams() {
     return new FTSearchParams();
   }
@@ -157,6 +164,10 @@ public class FTSearchParams implements IParams {
    *
    * @return the query itself
    */
+  /**
+   * Set the query not to return the contents of documents, and rather just return the ids
+   * @return the query itself
+   */
   public FTSearchParams noContent() {
     this.noContent = true;
     return this;
@@ -167,6 +178,10 @@ public class FTSearchParams implements IParams {
    *
    * @return the query object
    */
+  /**
+   * Set the query to verbatim mode, disabling stemming and query expansion
+   * @return the query object
+   */
   public FTSearchParams verbatim() {
     this.verbatim = true;
     return this;
@@ -175,6 +190,10 @@ public class FTSearchParams implements IParams {
   /**
    * Set the query not to filter for stopwords. In general this should not be used
    *
+   * @return the query object
+   */
+  /**
+   * Set the query not to filter for stopwords. In general this should not be used
    * @return the query object
    */
   public FTSearchParams noStopwords() {
@@ -188,28 +207,67 @@ public class FTSearchParams implements IParams {
    *
    * @return the query object itself
    */
+  /**
+   * Set the query to return a factored score for each result. This is useful to merge results from multiple queries.
+   * @return the query object itself
+   */
   public FTSearchParams withScores() {
     this.withScores = true;
     return this;
   }
 
+  /**
+   * Adds a range filter on a numeric field.
+   * @param field the field to filter on
+   * @param min the minimum value
+   * @param max the maximum value
+   * @return the query object
+   */
   public FTSearchParams filter(String field, double min, double max) {
     return filter(new NumericFilter(field, min, max));
   }
 
+  /**
+   * Adds a range filter on a numeric field with exclusive min and max values.
+   * @param field the field to filter on
+   * @param min the minimum value
+   * @param exclusiveMin true if the minimum value is exclusive, false otherwise
+   * @param max the maximum value
+   * @param exclusiveMax true if the maximum value is exclusive, false otherwise
+   * @return the query object
+   */
   public FTSearchParams filter(String field, double min, boolean exclusiveMin, double max, boolean exclusiveMax) {
     return filter(new NumericFilter(field, min, exclusiveMin, max, exclusiveMax));
   }
 
+  /**
+   * Adds a numeric filter to the query.
+   * @param numericFilter the numeric filter to add
+   * @return the query object
+   */
   public FTSearchParams filter(NumericFilter numericFilter) {
     filters.add(numericFilter);
     return this;
   }
 
+  /**
+   * Adds a radius filter on a geographical indexed field.
+   * @param field the field to filter on
+   * @param lon the longitude
+   * @param lat the latitude
+   * @param radius the radius
+   * @param unit the unit of the radius
+   * @return the query object
+   */
   public FTSearchParams geoFilter(String field, double lon, double lat, double radius, GeoUnit unit) {
     return geoFilter(new GeoFilter(field, lon, lat, radius, unit));
   }
 
+  /**
+   * Adds a geo filter to the query.
+   * @param geoFilter the geo filter to add
+   * @return the query object
+   */
   public FTSearchParams geoFilter(GeoFilter geoFilter) {
     filters.add(geoFilter);
     return this;
@@ -221,10 +279,20 @@ public class FTSearchParams implements IParams {
    * @param keys a list of TEXT fields in the schemas
    * @return the query object itself
    */
+  /**
+   * Limit the query to results that are limited to a specific set of keys.
+   * @param keys a list of TEXT fields in the schemas
+   * @return the query object itself
+   */
   public FTSearchParams inKeys(String... keys) {
     return inKeys(Arrays.asList(keys));
   }
 
+  /**
+   * Limit the query to results that are limited to a specific set of keys.
+   * @param keys a collection of TEXT fields in the schemas
+   * @return the query object itself
+   */
   public FTSearchParams inKeys(Collection<String> keys) {
     this.inKeys = keys;
     return this;
@@ -236,10 +304,20 @@ public class FTSearchParams implements IParams {
    * @param fields a list of TEXT fields in the schemas
    * @return the query object itself
    */
+  /**
+   * Limit the query to results that are limited to a specific set of fields.
+   * @param fields a list of TEXT fields in the schemas
+   * @return the query object itself
+   */
   public FTSearchParams inFields(String... fields) {
     return inFields(Arrays.asList(fields));
   }
 
+  /**
+   * Limit the query to results that are limited to a specific set of fields.
+   * @param fields a collection of TEXT fields in the schemas
+   * @return the query object itself
+   */
   public FTSearchParams inFields(Collection<String> fields) {
     if (this.inFields == null) {
       this.inFields = new ArrayList<>(fields);
@@ -252,6 +330,11 @@ public class FTSearchParams implements IParams {
   /**
    * Result's projection - the fields to return by the query
    *
+   * @param fields a list of TEXT fields in the schemas
+   * @return the query object itself
+   */
+  /**
+   * Result's projection - the fields to return by the query.
    * @param fields a list of TEXT fields in the schemas
    * @return the query object itself
    */
