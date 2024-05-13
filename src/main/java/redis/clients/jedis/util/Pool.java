@@ -3,6 +3,7 @@ package redis.clients.jedis.util;
 import org.apache.commons.pool2.PooledObjectFactory;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+
 import redis.clients.jedis.exceptions.JedisException;
 
 public class Pool<T> extends GenericObjectPool<T> {
@@ -62,6 +63,15 @@ public class Pool<T> extends GenericObjectPool<T> {
       super.invalidateObject(resource);
     } catch (Exception e) {
       throw new JedisException("Could not return the broken resource to the pool", e);
+    }
+  }
+  
+  public void addObject() {
+    try {
+      // to add a singular object to the pool
+      super.addObject();
+    } catch (Exception e) {
+      throw new JedisException("Error trying to add idle object", e);
     }
   }
 
