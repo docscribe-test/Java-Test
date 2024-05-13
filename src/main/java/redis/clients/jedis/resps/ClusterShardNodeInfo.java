@@ -69,6 +69,10 @@ public class ClusterShardNodeInfo {
     return port;
   }
 
+  /**
+  * Gets the reduction.
+  * @return The reduction.
+  */
   public String getReduction() {
     return reduction;
   }
@@ -93,6 +97,10 @@ public class ClusterShardNodeInfo {
     return clusterShardNodeInfo;
   }
 
+  /**
+  * Checks if SSL is enabled.
+  * @return True if SSL is enabled, false otherwise.
+  */
   public boolean isSsl() {
     return tlsPort != null;
   }
