@@ -1,9 +1,9 @@
 package redis.clients.jedis.params;
 
+import java.util.Objects;
+
 import redis.clients.jedis.CommandArguments;
 import redis.clients.jedis.Protocol.Keyword;
-
-import java.util.Objects;
 
 public class LPosParams implements IParams {
 
@@ -12,11 +12,6 @@ public class LPosParams implements IParams {
   
   public static LPosParams lPosParams() {
     return new LPosParams();
-  }
-
-  public LPosParams rank(int rank) {
-    this.rank = rank;
-    return this;
   }
 
   public LPosParams maxlen(int maxLen) {
