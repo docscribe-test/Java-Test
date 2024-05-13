@@ -42,6 +42,11 @@ public class RediSearchUtil {
     return output;
   }
 
+  /**
+  * Converts an array of floats to a byte array.
+  * @param input The array of floats to convert.
+  * @return The resulting byte array.
+  */
   public static byte[] toByteArray(float[] input) {
     byte[] bytes = new byte[Float.BYTES * input.length];
     ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer().put(input);
@@ -60,10 +65,20 @@ public class RediSearchUtil {
       ')', '-', '+', '=', '~', '|' //
   ));
 
+  /**
+  * Escapes special characters in the input text.
+  * @param text The text to escape.
+  * @return The escaped text.
+  */
   public static String escape(String text) {
     return escape(text, false);
   }
 
+  /**
+  * Escapes the input query text.
+  * @param query The query text to escape.
+  * @return The escaped query text.
+  */
   public static String escapeQuery(String query) {
     return escape(query, true);
   }
@@ -86,6 +101,10 @@ public class RediSearchUtil {
     return text.replace("\\", "");
   }
 
+  /**
+  * Private constructor to prevent instantiation of this utility class.
+  * @throws InstantiationError Always thrown to indicate that instantiation is not allowed.
+  */
   private RediSearchUtil() {
     throw new InstantiationError("Must not instantiate this class");
   }
