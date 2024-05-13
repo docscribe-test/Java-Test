@@ -21,6 +21,9 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.util.IOUtils;
 
+/**
+* This class provides a sentinel connection.
+*/
 public class SentineledConnectionProvider implements ConnectionProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(SentineledConnectionProvider.class);
@@ -74,26 +77,46 @@ public class SentineledConnectionProvider implements ConnectionProvider {
   }
 
   @Override
+  /**
+  * Retrieves a connection from the pool.
+  * @return a connection from the pool.
+  */
   public Connection getConnection() {
     return pool.getResource();
   }
 
   @Override
+  /**
+  * Retrieves a connection from the pool.
+  * @param args the command arguments.
+  * @return a connection from the pool.
+  */
   public Connection getConnection(CommandArguments args) {
     return pool.getResource();
   }
 
   @Override
+  /**
+  * Closes the connection provider, shutting down all sentinel listeners and closing the pool.
+  */
   public void close() {
     sentinelListeners.forEach(SentinelListener::shutdown);
 
     pool.close();
   }
 
+  /**
+  * Retrieves the current master.
+  * @return the current master.
+  */
   public HostAndPort getCurrentMaster() {
     return currentMaster;
   }
 
+  /**
+  * Initializes the master.
+  * @param master the master to be initialized.
+  */
   private void initMaster(HostAndPort master) {
     synchronized (initPoolLock) {
       if (!master.equals(currentMaster)) {
@@ -117,6 +140,11 @@ public class SentineledConnectionProvider implements ConnectionProvider {
     }
   }
 
+  /**
+  * Initializes the sentinels.
+  * @param sentinels the set of sentinels.
+  * @return the master.
+  */
   private HostAndPort initSentinels(Set<HostAndPort> sentinels) {
 
     HostAndPort master = null;
@@ -179,26 +207,47 @@ public class SentineledConnectionProvider implements ConnectionProvider {
    * Must be of size 2.
    * @param masterAddr master address
    */
+  /**
+  * Converts a list containing a host and port to a HostAndPort object.
+  * @param masterAddr a list containing a host and port.
+  * @return a HostAndPort object.
+  */
   private static HostAndPort toHostAndPort(List<String> masterAddr) {
     return toHostAndPort(masterAddr.get(0), masterAddr.get(1));
   }
 
+  /**
+  * Converts a host string and a port string to a HostAndPort object.
+  * @param hostStr the host string.
+  * @param portStr the port string.
+  * @return a HostAndPort object.
+  */
   private static HostAndPort toHostAndPort(String hostStr, String portStr) {
     return new HostAndPort(hostStr, Integer.parseInt(portStr));
   }
 
+  /**
+  * Thread that listens for sentinel updates.
+  */
   protected class SentinelListener extends Thread {
 
     protected final HostAndPort node;
     protected volatile Jedis sentinelJedis;
     protected AtomicBoolean running = new AtomicBoolean(false);
 
+    /**
+    * Constructs a new SentinelListener.
+    * @param node the node to listen to.
+    */
     public SentinelListener(HostAndPort node) {
       super(String.format("%s-SentinelListener-[%s]", masterName, node.toString()));
       this.node = node;
     }
 
     @Override
+    /**
+    * The main execution method for the SentinelListener thread.
+    */
     public void run() {
 
       running.set(true);
@@ -265,6 +314,9 @@ public class SentineledConnectionProvider implements ConnectionProvider {
     }
 
     // must not throw exception
+    /**
+    * Shuts down the SentinelListener thread.
+    */
     public void shutdown() {
       try {
         LOG.debug("Shutting down listener on {}.", node);
