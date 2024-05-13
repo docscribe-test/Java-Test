@@ -47,14 +47,34 @@ public class MurmurHash implements Hashing {
     return hash(ByteBuffer.wrap(data, offset, length), seed);
   }
 
+  /**
+   * Hashes the given bytes using the provided seed.
+   * @param data The bytes to hash.
+   * @param seed The seed for the hash.
+   * @return The 64-bit hash of the bytes.
+   */
   public static long hash64A(byte[] data, int seed) {
     return hash64A(ByteBuffer.wrap(data), seed);
   }
 
+  /**
+   * Hashes a part of the byte array using the provided offset, length, and seed.
+   * @param data The data to hash.
+   * @param offset The starting index to process.
+   * @param length The number of bytes to process.
+   * @param seed The seed for the hash.
+   * @return The 64-bit hash of the specified data.
+   */
   public static long hash64A(byte[] data, int offset, int length, int seed) {
     return hash64A(ByteBuffer.wrap(data, offset, length), seed);
   }
 
+  /**
+   * Hashes the data in the ByteBuffer using the provided seed.
+   * @param buf The ByteBuffer containing the data to hash.
+   * @param seed The seed for the hash.
+   * @return The 64-bit hash of the ByteBuffer data.
+   */
   public static long hash64A(ByteBuffer buf, int seed) {
     ByteOrder byteOrder = buf.order();
     buf.order(ByteOrder.LITTLE_ENDIAN);
