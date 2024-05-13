@@ -6,6 +6,10 @@ import java.util.Map;
 
 import redis.clients.jedis.CommandArguments;
 
+/**
+* ConnectionProvider is an interface that provides methods to interact with database connections.
+* This interface extends AutoCloseable, which provides automatic resource management for objects that are closed when they are no longer needed.
+*/
 public interface ConnectionProvider extends AutoCloseable {
 
   /**
@@ -29,6 +33,11 @@ public interface ConnectionProvider extends AutoCloseable {
    *
    * @return a map containing a single entry with the connection string as the key and the connection object as the value.
    */
+  /**
+  * This method provides a default implementation for retrieving a map representation of the database connection.
+  * The map contains a single entry where the key is the connection's string representation and the value is the connection object.
+  * @return a map containing a single entry with the connection string as the key and the connection object as the value.
+  */
   default Map<?, ?> getConnectionMap() {
     final Connection c = getConnection();
     return Collections.singletonMap(c.toString(), c);
