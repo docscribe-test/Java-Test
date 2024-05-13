@@ -13,6 +13,13 @@ import redis.clients.jedis.util.SafeEncoder;
 public class RediSearchUtil {
 
 
+  /**
+   * Converts a Map containing keys of type String and values of type Object to a Map with keys and values of type String.
+   * If stringEscape is false, the values are directly converted to String. If stringEscape is true, special characters are escaped in the values.
+   * @param input The input Map to be converted.
+   * @param stringEscape Flag indicating whether to escape special characters in the values.
+   * @return A Map with keys and values of type String.
+   */
   public static Map<String, String> toStringMap(Map<String, Object> input) {
     return toStringMap(input, false);
   }
@@ -42,6 +49,12 @@ public class RediSearchUtil {
     return output;
   }
 
+  /**
+   * Converts an array of float values to a byte array.
+   * The float values are converted to bytes with little-endian order.
+   * @param input The input array of float values.
+   * @return A byte array representing the input float values.
+   */
   public static byte[] toByteArray(float[] input) {
     byte[] bytes = new byte[Float.BYTES * input.length];
     ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer().put(input);
@@ -60,14 +73,35 @@ public class RediSearchUtil {
       ')', '-', '+', '=', '~', '|' //
   ));
 
+  /**
+   * Escapes special characters in the input text.
+   * Special characters include: , . < > { } [ ] " ' : ; ! @ # $ % ^ & * ( ) - + = ~ |
+   * @param text The input text to escape special characters.
+   * @return The text with escaped special characters.
+   */
   public static String escape(String text) {
     return escape(text, false);
   }
 
+  /**
+   * Escapes special characters in the input query text.
+   * Special characters include: , . < > { } [ ] " ' : ; ! @ # $ % ^ & * ( ) - + = ~ |
+   * Spaces are also escaped in query text.
+   * @param query The input query text to escape special characters.
+   * @return The query text with escaped special characters.
+   */
   public static String escapeQuery(String query) {
     return escape(query, true);
   }
 
+  /**
+   * Escapes special characters in the input text.
+   * Special characters include: , . < > { } [ ] " ' : ; ! @ # $ % ^ & * ( ) - + = ~ |
+   * If querying is true, spaces are also escaped in the text.
+   * @param text The input text to escape special characters.
+   * @param querying Flag indicating whether to escape spaces in addition to special characters.
+   * @return The text with escaped special characters.
+   */
   public static String escape(String text, boolean querying) {
     char[] chars = text.toCharArray();
 
@@ -86,6 +120,10 @@ public class RediSearchUtil {
     return text.replace("\\", "");
   }
 
+  /**
+   * Private constructor to prevent instantiation of the RediSearchUtil class.
+   * Throws an InstantiationError with a message indicating not to instantiate this class.
+   */
   private RediSearchUtil() {
     throw new InstantiationError("Must not instantiate this class");
   }
