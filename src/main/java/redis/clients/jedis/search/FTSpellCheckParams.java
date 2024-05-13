@@ -21,9 +21,16 @@ public class FTSpellCheckParams implements IParams {
   private Integer distance;
   private Integer dialect;
 
+  /**
+   * Default constructor for FTSpellCheckParams.
+   */
   public FTSpellCheckParams() {
   }
 
+  /**
+   * Creates and returns a new instance of FTSpellCheckParams.
+   * @return FTSpellCheckParams instance
+   */
   public static FTSpellCheckParams spellCheckParams() {
     return new FTSpellCheckParams();
   }

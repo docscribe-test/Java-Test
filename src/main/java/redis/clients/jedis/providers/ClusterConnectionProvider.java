@@ -20,10 +20,18 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import static redis.clients.jedis.JedisCluster.INIT_NO_ERROR_PROPERTY;
 
+/**
+ * ClusterConnectionProvider class that implements ConnectionProvider interface.
+ */
 public class ClusterConnectionProvider implements ConnectionProvider {
 
   protected final JedisClusterInfoCache cache;
 
+  /**
+   * Constructor for ClusterConnectionProvider.
+   * @param clusterNodes Set of cluster nodes.
+   * @param clientConfig JedisClientConfig object.
+   */
   public ClusterConnectionProvider(Set<HostAndPort> clusterNodes, JedisClientConfig clientConfig) {
     this.cache = new JedisClusterInfoCache(clientConfig, clusterNodes);
     initializeSlotsCache(clusterNodes, clientConfig);
@@ -41,6 +49,11 @@ public class ClusterConnectionProvider implements ConnectionProvider {
     initializeSlotsCache(clusterNodes, clientConfig);
   }
 
+  /**
+   * Initializes the cluster slots cache.
+   * @param startNodes Set of starting nodes.
+   * @param clientConfig JedisClientConfig object.
+   */
   private void initializeSlotsCache(Set<HostAndPort> startNodes, JedisClientConfig clientConfig) {
     if (startNodes.isEmpty()) {
       throw new JedisClusterOperationException("No nodes to initialize cluster slots cache.");
@@ -76,10 +89,17 @@ public class ClusterConnectionProvider implements ConnectionProvider {
     cache.close();
   }
 
+  /**
+   * Renews the slot cache.
+   */
   public void renewSlotCache() {
     cache.renewClusterSlots(null);
   }
 
+  /**
+   * Renews the slot cache with a specific connection.
+   * @param jedis Connection object.
+   */
   public void renewSlotCache(Connection jedis) {
     cache.renewClusterSlots(jedis);
   }
@@ -88,21 +108,40 @@ public class ClusterConnectionProvider implements ConnectionProvider {
     return cache.getNodes();
   }
 
+  /**
+   * Gets the node for a given slot.
+   * @param slot Slot number.
+   * @return HostAndPort object representing the node.
+   */
   public HostAndPort getNode(int slot) {
     return slot >= 0 ? cache.getSlotNode(slot) : null;
   }
 
+  /**
+   * Gets a connection for the specified node.
+   * @param node HostAndPort object representing the node.
+   * @return Connection object.
+   */
   public Connection getConnection(HostAndPort node) {
     return node != null ? cache.setupNodeIfNotExist(node).getResource() : getConnection();
   }
 
   @Override
+  /**
+   * Gets a connection based on command arguments.
+   * @param args CommandArguments object.
+   * @return Connection object.
+   */
   public Connection getConnection(CommandArguments args) {
     final int slot = ((ClusterCommandArguments) args).getCommandHashSlot();
     return slot >= 0 ? getConnectionFromSlot(slot) : getConnection();
   }
 
   @Override
+  /**
+   * Gets a connection.
+   * @return Connection object.
+   */
   public Connection getConnection() {
     // In antirez's redis-rb-cluster implementation, getRandomConnection always
     // return valid connection (able to ping-pong) or exception if all
@@ -139,6 +178,11 @@ public class ClusterConnectionProvider implements ConnectionProvider {
     throw noReachableNode;
   }
 
+  /**
+   * Gets a connection based on the specified slot.
+   * @param slot Slot number.
+   * @return Connection object.
+   */
   public Connection getConnectionFromSlot(int slot) {
     ConnectionPool connectionPool = cache.getSlotPool(slot);
     if (connectionPool != null) {
@@ -159,6 +203,10 @@ public class ClusterConnectionProvider implements ConnectionProvider {
   }
 
   @Override
+  /**
+   * Gets an unmodifiable map of connections.
+   * @return Map of String to ConnectionPool.
+   */
   public Map<String, ConnectionPool> getConnectionMap() {
     return Collections.unmodifiableMap(getNodes());
   }
