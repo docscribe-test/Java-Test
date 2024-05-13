@@ -6,6 +6,9 @@ import java.util.Map;
 
 import redis.clients.jedis.CommandArguments;
 
+/**
+* Interface for providing database connections.
+*/
 public interface ConnectionProvider extends AutoCloseable {
 
   /**
@@ -29,6 +32,10 @@ public interface ConnectionProvider extends AutoCloseable {
    *
    * @return a map containing a single entry with the connection string as the key and the connection object as the value.
    */
+  /**
+  * Retrieves a map representation of the current database connection.
+  * @return a map with the connection string as the key and the connection object as the value.
+  */
   default Map<?, ?> getConnectionMap() {
     final Connection c = getConnection();
     return Collections.singletonMap(c.toString(), c);
