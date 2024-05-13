@@ -9,6 +9,9 @@ public class TimeSeriesProtocol {
   public static final byte[] PLUS = SafeEncoder.encode("+");
   public static final byte[] MINUS = SafeEncoder.encode("-");
 
+  /**
+  * This enum represents commands for Time Series operations.
+  */
   public enum TimeSeriesCommand implements ProtocolCommand {
 
     CREATE("TS.CREATE"),
@@ -29,8 +32,15 @@ public class TimeSeriesProtocol {
     ALTER("TS.ALTER"),
     QUERYINDEX("TS.QUERYINDEX");
 
+    /**
+    * The raw byte array representation of the command or keyword.
+    */
     private final byte[] raw;
 
+    /**
+    * Constructor for TimeSeriesCommand enum.
+    * @param alt The alternative representation of the command.
+    */
     private TimeSeriesCommand(String alt) {
       raw = SafeEncoder.encode(alt);
     }
@@ -41,6 +51,9 @@ public class TimeSeriesProtocol {
     }
   }
 
+  /**
+  * This enum represents keywords for Time Series operations.
+  */
   public enum TimeSeriesKeyword implements Rawable {
 
     RESET,
@@ -70,6 +83,9 @@ public class TimeSeriesProtocol {
 
     private final byte[] raw;
 
+    /**
+    * Constructor for TimeSeriesKeyword enum.
+    */
     private TimeSeriesKeyword() {
       raw = SafeEncoder.encode(name());
     }
@@ -79,10 +95,18 @@ public class TimeSeriesProtocol {
       return raw;
     }
 
+    /**
+    * Get the first TimeSeriesKeyword.
+    * @return The first TimeSeriesKeyword.
+    */
     public static TimeSeriesKeyword getFirst() {
       return values()[0];
     }
 
+    /**
+    * Get the last TimeSeriesKeyword.
+    * @return The last TimeSeriesKeyword.
+    */
     public static TimeSeriesKeyword getLast() {
       return values()[values().length - 1];
     }
