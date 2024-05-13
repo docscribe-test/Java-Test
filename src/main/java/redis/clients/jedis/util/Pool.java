@@ -22,10 +22,16 @@ public class Pool<T> extends GenericObjectPool<T> {
   }
 
   @Override
+  /**
+  * Closes the pool. Calls destroy().
+  */
   public void close() {
     destroy();
   }
 
+  /**
+  * Destroys the pool.
+  */
   public void destroy() {
     try {
       super.close();
@@ -34,6 +40,10 @@ public class Pool<T> extends GenericObjectPool<T> {
     }
   }
 
+  /**
+  * Gets a resource from the pool.
+  * @return The borrowed resource.
+  */
   public T getResource() {
     try {
       return super.borrowObject();
@@ -44,6 +54,10 @@ public class Pool<T> extends GenericObjectPool<T> {
     }
   }
 
+  /**
+  * Returns a resource to the pool.
+  * @param resource The resource to be returned.
+  */
   public void returnResource(final T resource) {
     if (resource == null) {
       return;
@@ -55,6 +69,10 @@ public class Pool<T> extends GenericObjectPool<T> {
     }
   }
 
+  /**
+  * Returns a broken resource to the pool.
+  * @param resource The broken resource to be returned.
+  */
   public void returnBrokenResource(final T resource) {
     if (resource == null) {
       return;
@@ -66,6 +84,9 @@ public class Pool<T> extends GenericObjectPool<T> {
     }
   }
   
+  /**
+  * Adds a singular object to the pool.
+  */
   public void addObject() {
     try {
       // to add a singular object to the pool
@@ -76,6 +97,10 @@ public class Pool<T> extends GenericObjectPool<T> {
   }
 
   @Override
+  /**
+  * Adds multiple objects to the pool.
+  * @param count The number of objects to add.
+  */
   public void addObjects(int count) {
     try {
       for (int i = 0; i < count; i++) {
