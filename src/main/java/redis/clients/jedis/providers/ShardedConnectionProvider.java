@@ -20,6 +20,9 @@ import redis.clients.jedis.ShardedCommandArguments;
 import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.jedis.util.Hashing;
 
+/**
+* This is a deprecated class that provides sharded connections.
+*/
 @Deprecated
 public class ShardedConnectionProvider implements ConnectionProvider {
 
@@ -29,10 +32,19 @@ public class ShardedConnectionProvider implements ConnectionProvider {
   private final GenericObjectPoolConfig<Connection> poolConfig;
   private final Hashing algo;
 
+  /**
+  * Constructor for creating a ShardedConnectionProvider with a list of shards.
+  * @param shards List of shards.
+  */
   public ShardedConnectionProvider(List<HostAndPort> shards) {
     this(shards, DefaultJedisClientConfig.builder().build());
   }
 
+  /**
+  * Constructor for creating a ShardedConnectionProvider with a list of shards and a client configuration.
+  * @param shards List of shards.
+  * @param clientConfig Configuration for the Jedis client.
+  */
   public ShardedConnectionProvider(List<HostAndPort> shards, JedisClientConfig clientConfig) {
     this(shards, clientConfig, new GenericObjectPoolConfig<Connection>());
   }
@@ -55,6 +67,10 @@ public class ShardedConnectionProvider implements ConnectionProvider {
     initialize(shards);
   }
 
+  /**
+  * Initialize the ShardedConnectionProvider with a list of shards.
+  * @param shards List of shards.
+  */
   private void initialize(List<HostAndPort> shards) {
     for (int i = 0; i < shards.size(); i++) {
       HostAndPort shard = shards.get(i);
@@ -66,6 +82,11 @@ public class ShardedConnectionProvider implements ConnectionProvider {
     }
   }
 
+  /**
+  * Setup a node if it does not exist.
+  * @param node Node to setup.
+  * @return The existing or new connection pool.
+  */
   private ConnectionPool setupNodeIfNotExist(final HostAndPort node) {
     String nodeKey = node.toString();
     ConnectionPool existingPool = resources.get(nodeKey);
@@ -77,10 +98,17 @@ public class ShardedConnectionProvider implements ConnectionProvider {
     return nodePool;
   }
 
+  /**
+  * Get the hashing algorithm.
+  * @return The hashing algorithm.
+  */
   public Hashing getHashingAlgo() {
     return algo;
   }
 
+  /**
+  * Reset the ShardedConnectionProvider by clearing resources and nodes.
+  */
   private void reset() {
     for (ConnectionPool pool : resources.values()) {
       try {
@@ -96,24 +124,46 @@ public class ShardedConnectionProvider implements ConnectionProvider {
   }
 
   @Override
+  /**
+  * Close the ShardedConnectionProvider by resetting it.
+  */
   public void close() {
     reset();
   }
 
+  /**
+  * Get a node based on a hash.
+  * @param hash Hash of the node.
+  * @return The node corresponding to the hash.
+  */
   public HostAndPort getNode(Long hash) {
     return hash != null ? getNodeFromHash(hash) : null;
   }
 
+  /**
+  * Get a connection to a node.
+  * @param node Node to get connection to.
+  * @return Connection to the node.
+  */
   public Connection getConnection(HostAndPort node) {
     return node != null ? setupNodeIfNotExist(node).getResource() : getConnection();
   }
 
   @Override
+  /**
+  * Get a connection using command arguments.
+  * @param args Command arguments.
+  * @return Connection based on the command arguments.
+  */
   public Connection getConnection(CommandArguments args) {
     final Long hash = ((ShardedCommandArguments) args).getKeyHash();
     return hash != null ? getConnection(getNodeFromHash(hash)) : getConnection();
   }
 
+  /**
+  * Get a shuffled list of node pools.
+  * @return Shuffled list of node pools.
+  */
   private List<ConnectionPool> getShuffledNodesPool() {
     List<ConnectionPool> pools = new ArrayList<>(resources.values());
     Collections.shuffle(pools);
@@ -121,6 +171,11 @@ public class ShardedConnectionProvider implements ConnectionProvider {
   }
 
   @Override
+  /**
+  * Get a connection from the shuffled nodes pool.
+  * @return Connection from the shuffled nodes pool.
+  * @throws JedisException If no reachable shard is found.
+  */
   public Connection getConnection() {
     List<ConnectionPool> pools = getShuffledNodesPool();
 
@@ -153,6 +208,11 @@ public class ShardedConnectionProvider implements ConnectionProvider {
     throw noReachableNode;
   }
 
+  /**
+  * Get a node from a hash.
+  * @param hash Hash of the node.
+  * @return Node corresponding to the hash.
+  */
   private HostAndPort getNodeFromHash(Long hash) {
     SortedMap<Long, HostAndPort> tail = nodes.tailMap(hash);
     if (tail.isEmpty()) {
@@ -162,6 +222,10 @@ public class ShardedConnectionProvider implements ConnectionProvider {
   }
 
   @Override
+  /**
+  * Get a map of connection pools.
+  * @return Map of connection pools.
+  */
   public Map<String, ConnectionPool> getConnectionMap() {
     return Collections.unmodifiableMap(resources);
   }

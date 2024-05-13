@@ -43,6 +43,9 @@ import redis.clients.jedis.args.SortingOrder;
 import redis.clients.jedis.params.IParams;
 import redis.clients.jedis.util.LazyRawable;
 
+/**
+* This class is used to set the parameters for a full text search query.
+*/
 public class FTSearchParams implements IParams {
 
   private boolean noContent = false;
@@ -71,14 +74,25 @@ public class FTSearchParams implements IParams {
   private Map<String, Object> params;
   private Integer dialect;
 
+  /**
+  * The default constructor for FTSearchParams.
+  */
   public FTSearchParams() {
   }
 
+  /**
+  * This method creates a new instance of FTSearchParams.
+  * @return A new instance of FTSearchParams.
+  */
   public static FTSearchParams searchParams() {
     return new FTSearchParams();
   }
 
   @Override
+  /**
+  * This method adds parameters to the search query.
+  * @param args The command arguments to be added.
+  */
   public void addParams(CommandArguments args) {
 
     if (noContent) {
@@ -180,61 +194,132 @@ public class FTSearchParams implements IParams {
     }
   }
 
+  /**
+  * This method sets the noContent flag to true.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams noContent() {
     this.noContent = true;
     return this;
   }
 
+  /**
+  * This method sets the verbatim flag to true.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams verbatim() {
     this.verbatim = true;
     return this;
   }
 
+  /**
+  * This method sets the noStopwords flag to true.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams noStopwords() {
     this.noStopwords = true;
     return this;
   }
 
+  /**
+  * This method sets the withScores flag to true.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams withScores() {
     this.withScores = true;
     return this;
   }
 
+  /**
+  * This method creates a new numeric filter and adds it to the list of filters.
+  * @param field The field for the new numeric filter.
+  * @param min The minimum value for the new numeric filter.
+  * @param max The maximum value for the new numeric filter.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams filter(String field, double min, double max) {
     return filter(new NumericFilter(field, min, max));
   }
 
+  /**
+  * This method creates a new numeric filter with exclusive min and max values and adds it to the list of filters.
+  * @param field The field for the new numeric filter.
+  * @param min The minimum value for the new numeric filter.
+  * @param exclusiveMin The flag for exclusive minimum value.
+  * @param max The maximum value for the new numeric filter.
+  * @param exclusiveMax The flag for exclusive maximum value.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams filter(String field, double min, boolean exclusiveMin, double max, boolean exclusiveMax) {
     return filter(new NumericFilter(field, min, exclusiveMin, max, exclusiveMax));
   }
 
+  /**
+  * This method adds a numeric filter to the list of filters.
+  * @param numericFilter The numeric filter to be added.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams filter(NumericFilter numericFilter) {
     filters.add(numericFilter);
     return this;
   }
 
+  /**
+  * This method creates a new geo filter and adds it to the list of filters.
+  * @param field The field for the new geo filter.
+  * @param lon The longitude for the new geo filter.
+  * @param lat The latitude for the new geo filter.
+  * @param radius The radius for the new geo filter.
+  * @param unit The unit for the new geo filter.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams geoFilter(String field, double lon, double lat, double radius, GeoUnit unit) {
     return geoFilter(new GeoFilter(field, lon, lat, radius, unit));
   }
 
+  /**
+  * This method adds a geo filter to the list of filters.
+  * @param geoFilter The geo filter to be added.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams geoFilter(GeoFilter geoFilter) {
     filters.add(geoFilter);
     return this;
   }
 
+  /**
+  * This method sets the inKeys collection to the keys passed as arguments.
+  * @param keys The keys to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams inKeys(String... keys) {
     return inKeys(Arrays.asList(keys));
   }
 
+  /**
+  * This method sets the inKeys collection to a given collection of keys.
+  * @param keys The collection of keys to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams inKeys(Collection<String> keys) {
     this.inKeys = keys;
     return this;
   }
 
+  /**
+  * This method adds a collection of fields to the inFields collection.
+  * @param fields The fields to be added.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams inFields(String... fields) {
     return inFields(Arrays.asList(fields));
   }
 
+  /**
+  * This method adds a collection of fields to the inFields collection.
+  * @param fields The collection of fields to be added.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams inFields(Collection<String> fields) {
     if (this.inFields == null) {
       this.inFields = new ArrayList<>(fields);
@@ -244,6 +329,11 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
+  /**
+  * This method adds a collection of fields to the returnFields collection.
+  * @param fields The fields to be added.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams returnFields(String... fields) {
     if (returnFieldNames != null) {
       Arrays.stream(fields).forEach(f -> returnFieldNames.add(FieldName.of(f)));
@@ -256,16 +346,31 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
+  /**
+  * This method adds a field to the returnFieldNames collection.
+  * @param field The field to be added.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams returnField(FieldName field) {
     initReturnFieldNames();
     returnFieldNames.add(field);
     return this;
   }
 
+  /**
+  * This method adds a collection of fields to the returnFieldNames collection.
+  * @param fields The fields to be added.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams returnFields(FieldName... fields) {
     return returnFields(Arrays.asList(fields));
   }
 
+  /**
+  * This method adds a collection of fields to the returnFieldNames collection.
+  * @param fields The collection of fields to be added.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams returnFields(Collection<FieldName> fields) {
     initReturnFieldNames();
     returnFieldNames.addAll(fields);
@@ -282,21 +387,39 @@ public class FTSearchParams implements IParams {
     }
   }
 
+  /**
+  * This method sets the summarize flag to true.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams summarize() {
     this.summarize = true;
     return this;
   }
 
+  /**
+  * This method sets the summarize parameters.
+  * @param summarizeParams The summarize parameters to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams summarize(SummarizeParams summarizeParams) {
     this.summarizeParams = summarizeParams;
     return this;
   }
 
+  /**
+  * This method sets the highlight flag to true.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams highlight() {
     this.highlight = true;
     return this;
   }
 
+  /**
+  * This method sets the highlight parameters.
+  * @param highlightParams The highlight parameters to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams highlight(HighlightParams highlightParams) {
     this.highlightParams = highlightParams;
     return this;
@@ -321,37 +444,74 @@ public class FTSearchParams implements IParams {
 //    return this;
 //  }
 
+  /**
+  * This method sets the slop.
+  * @param slop The slop to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams slop(int slop) {
     this.slop = slop;
     return this;
   }
 
+  /**
+  * This method sets the timeout.
+  * @param timeout The timeout to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams timeout(long timeout) {
     this.timeout = timeout;
     return this;
   }
 
+  /**
+  * This method sets the inOrder flag to true.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams inOrder() {
     this.inOrder = true;
     return this;
   }
 
+  /**
+  * This method sets the language.
+  * @param language The language to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams language(String language) {
     this.language = language;
     return this;
   }
 
+  /**
+  * This method sets the sortBy and sortOrder.
+  * @param sortBy The sortBy to be set.
+  * @param order The sortOrder to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams sortBy(String sortBy, SortingOrder order) {
     this.sortBy = sortBy;
     this.sortOrder = order;
     return this;
   }
 
+  /**
+  * This method sets the limit.
+  * @param offset The offset to be set.
+  * @param num The number to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams limit(int offset, int num) {
     this.limit = new int[]{offset, num};
     return this;
   }
 
+  /**
+  * This method adds a parameter to the params map.
+  * @param name The name of the parameter.
+  * @param value The value of the parameter.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams addParam(String name, Object value) {
     if (params == null) {
       params = new HashMap<>();
@@ -360,6 +520,11 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
+  /**
+  * This method sets the params map to a given map of parameters.
+  * @param paramValues The map of parameters to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams params(Map<String, Object> paramValues) {
     if (this.params == null) {
       this.params = new HashMap<>(paramValues);
@@ -369,12 +534,22 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
+  /**
+  * This method sets the dialect.
+  * @param dialect The dialect to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams dialect(int dialect) {
     this.dialect = dialect;
     return this;
   }
 
   @Internal
+  /**
+  * This method sets the dialect only if it is not 0 and the current dialect is null.
+  * @param dialect The dialect to be set.
+  * @return The current instance of FTSearchParams.
+  */
   public FTSearchParams dialectOptional(int dialect) {
     if (dialect != 0 && this.dialect == null) {
       this.dialect = dialect;
@@ -382,10 +557,18 @@ public class FTSearchParams implements IParams {
     return this;
   }
 
+  /**
+  * This method gets the value of the noContent flag.
+  * @return The current value of the noContent flag.
+  */
   public boolean getNoContent() {
     return noContent;
   }
 
+  /**
+  * This method gets the value of the withScores flag.
+  * @return The current value of the withScores flag.
+  */
   public boolean getWithScores() {
     return withScores;
   }
