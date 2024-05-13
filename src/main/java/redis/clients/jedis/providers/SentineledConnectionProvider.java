@@ -271,6 +271,9 @@ public class SentineledConnectionProvider implements ConnectionProvider {
   /**
   * Thread that listens for sentinel updates.
   */
+  /**
+  * Thread that listens for sentinel updates.
+  */
   protected class SentinelListener extends Thread {
 
     protected final HostAndPort node;
@@ -285,12 +288,19 @@ public class SentineledConnectionProvider implements ConnectionProvider {
     * Constructs a new SentinelListener with the specified node.
     * @param node the node to listen to.
     */
+    /**
+    * Constructs a new SentinelListener with the specified node.
+    * @param node the node to listen to.
+    */
     public SentinelListener(HostAndPort node) {
       super(String.format("%s-SentinelListener-[%s]", masterName, node.toString()));
       this.node = node;
     }
 
     @Override
+    /**
+    * The main execution method for the SentinelListener thread.
+    */
     /**
     * The main execution method for the SentinelListener thread.
     */
@@ -363,6 +373,9 @@ public class SentineledConnectionProvider implements ConnectionProvider {
     }
 
     // must not throw exception
+    /**
+    * Shuts down the SentinelListener thread.
+    */
     /**
     * Shuts down the SentinelListener thread.
     */
