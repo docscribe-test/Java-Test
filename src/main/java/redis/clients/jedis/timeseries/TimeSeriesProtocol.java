@@ -78,5 +78,13 @@ public class TimeSeriesProtocol {
     public byte[] getRaw() {
       return raw;
     }
+
+    public static TimeSeriesKeyword getFirst() {
+      return values()[0];
+    }
+
+    public static TimeSeriesKeyword getLast() {
+      return values()[values().length - 1];
+    }
   }
 }
