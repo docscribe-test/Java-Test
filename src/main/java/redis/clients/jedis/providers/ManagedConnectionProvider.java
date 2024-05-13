@@ -19,11 +19,18 @@ public class ManagedConnectionProvider implements ConnectionProvider {
   * This method is used to set the connection.
   * @param connection The connection to be set.
   */
+  /**
+  * This method is used to set the connection.
+  * @param connection The connection to be set.
+  */
   public final void setConnection(Connection connection) {
     this.connection = connection;
   }
 
   @Override
+  /**
+  * This method is used to close the connection.
+  */
   /**
   * This method is used to close the connection.
   */
@@ -35,11 +42,20 @@ public class ManagedConnectionProvider implements ConnectionProvider {
   * This method is used to get the connection.
   * @return The current connection.
   */
+  /**
+  * This method is used to get the connection.
+  * @return The current connection.
+  */
   public final Connection getConnection() {
     return connection;
   }
 
   @Override
+  /**
+  * This method is used to get the connection with specific arguments.
+  * @param args The command arguments for the connection.
+  * @return The current connection.
+  */
   /**
   * This method is used to get the connection with specific arguments.
   * @param args The command arguments for the connection.

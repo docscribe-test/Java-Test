@@ -38,6 +38,11 @@ public class FTSpellCheckParams implements IParams {
   /**
    * Specifies an inclusion (INCLUDE) of a custom dictionary.
    */
+  /**
+   * Specifies an inclusion (INCLUDE) of a custom dictionary.
+   * @param dictionary the custom dictionary to include
+   * @return FTSpellCheckParams instance
+   */
   public FTSpellCheckParams includeTerm(String dictionary) {
     return addTerm(dictionary, INCLUDE);
   }
@@ -45,12 +50,23 @@ public class FTSpellCheckParams implements IParams {
   /**
    * Specifies an exclusion (EXCLUDE) of a custom dictionary.
    */
+  /**
+   * Specifies an exclusion (EXCLUDE) of a custom dictionary.
+   * @param dictionary the custom dictionary to exclude
+   * @return FTSpellCheckParams instance
+   */
   public FTSpellCheckParams excludeTerm(String dictionary) {
     return addTerm(dictionary, EXCLUDE);
   }
 
   /**
    * Specifies an inclusion (INCLUDE) or exclusion (EXCLUDE) of a custom dictionary.
+   */
+  /**
+   * Specifies an inclusion (INCLUDE) or exclusion (EXCLUDE) of a custom dictionary.
+   * @param dictionary the custom dictionary to add
+   * @param type the type of inclusion/exclusion (INCLUDE or EXCLUDE)
+   * @return FTSpellCheckParams instance
    */
   private FTSpellCheckParams addTerm(String dictionary, Rawable type) {
     if (this.terms == null) {
@@ -63,6 +79,11 @@ public class FTSpellCheckParams implements IParams {
   /**
    * Maximum Levenshtein distance for spelling suggestions (default: 1, max: 4).
    */
+  /**
+   * Maximum Levenshtein distance for spelling suggestions (default: 1, max: 4).
+   * @param distance the maximum Levenshtein distance
+   * @return FTSpellCheckParams instance
+   */
   public FTSpellCheckParams distance(int distance) {
     this.distance = distance;
     return this;
@@ -70,6 +91,11 @@ public class FTSpellCheckParams implements IParams {
 
   /**
    * Selects the dialect version under which to execute the query.
+   */
+  /**
+   * Selects the dialect version under which to execute the query.
+   * @param dialect the dialect version to select
+   * @return FTSpellCheckParams instance
    */
   public FTSpellCheckParams dialect(int dialect) {
     this.dialect = dialect;

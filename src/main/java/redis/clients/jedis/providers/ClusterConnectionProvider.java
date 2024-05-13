@@ -85,10 +85,16 @@ public class ClusterConnectionProvider implements ConnectionProvider {
   }
 
   @Override
+  /**
+   * Closes the cluster connection provider.
+   */
   public void close() {
     cache.close();
   }
 
+  /**
+   * Renews the slot cache.
+   */
   /**
    * Renews the slot cache.
    */
@@ -104,6 +110,10 @@ public class ClusterConnectionProvider implements ConnectionProvider {
     cache.renewClusterSlots(jedis);
   }
 
+  /**
+   * Retrieves a map of nodes and their connection pools.
+   * @return Map of String to ConnectionPool.
+   */
   public Map<String, ConnectionPool> getNodes() {
     return cache.getNodes();
   }
@@ -120,6 +130,11 @@ public class ClusterConnectionProvider implements ConnectionProvider {
   /**
    * Gets a connection for the specified node.
    * @param node HostAndPort object representing the node.
+   * @return Connection object.
+   */
+  /**
+   * Retrieves a connection for the specified node.
+   * @param node The HostAndPort object representing the node.
    * @return Connection object.
    */
   public Connection getConnection(HostAndPort node) {
@@ -183,6 +198,11 @@ public class ClusterConnectionProvider implements ConnectionProvider {
    * @param slot Slot number.
    * @return Connection object.
    */
+  /**
+   * Retrieves a connection based on the specified slot.
+   * @param slot The slot number.
+   * @return Connection object.
+   */
   public Connection getConnectionFromSlot(int slot) {
     ConnectionPool connectionPool = cache.getSlotPool(slot);
     if (connectionPool != null) {
@@ -205,6 +225,10 @@ public class ClusterConnectionProvider implements ConnectionProvider {
   @Override
   /**
    * Gets an unmodifiable map of connections.
+   * @return Map of String to ConnectionPool.
+   */
+  /**
+   * Retrieves an unmodifiable map of connections.
    * @return Map of String to ConnectionPool.
    */
   public Map<String, ConnectionPool> getConnectionMap() {

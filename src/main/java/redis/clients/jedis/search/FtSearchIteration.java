@@ -32,6 +32,13 @@ public class FtSearchIteration extends JedisCommandIterationBase<SearchResult, D
   * @param indexName The index name.
   * @param query The query.
   */
+  /**
+  * Constructor for FtSearchIteration.
+  * @param connectionProvider The connection provider.
+  * @param batchSize The batch size.
+  * @param indexName The index name.
+  * @param query The query.
+  */
   public FtSearchIteration(ConnectionProvider connectionProvider, int batchSize, String indexName, Query query) {
     this(connectionProvider, null, batchSize, indexName, query);
   }
