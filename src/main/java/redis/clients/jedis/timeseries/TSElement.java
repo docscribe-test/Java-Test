@@ -18,6 +18,11 @@ public class TSElement {
     return value;
   }
 
+  /**
+  * Calculate the difference in timestamp between this element and the given element.
+  * @param other The other TSElement to compare timestamps with.
+  * @return The difference in timestamp between the two elements.
+  */
   public long diff(TSElement other) {
     return this.timestamp - other.timestamp;
   }
