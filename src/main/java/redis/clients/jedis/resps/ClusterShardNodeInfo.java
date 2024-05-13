@@ -44,6 +44,7 @@ public class ClusterShardNodeInfo {
     role = (String) map.get(ROLE);
     replicationOffset = (Long) map.get(REPLICATION_OFFSET);
     health = (String) map.get(HEALTH);
+    reduction = (String) map.get(REDUCTION);
 
     clusterShardNodeInfo = map;
   }
@@ -66,6 +67,10 @@ public class ClusterShardNodeInfo {
 
   public Long getPort() {
     return port;
+  }
+
+  public String getReduction() {
+    return reduction;
   }
 
   public Long getTlsPort() {
