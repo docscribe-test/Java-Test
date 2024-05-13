@@ -1,9 +1,9 @@
 package redis.clients.jedis.params;
 
+import java.util.Objects;
+
 import redis.clients.jedis.CommandArguments;
 import redis.clients.jedis.args.BitCountOption;
-
-import java.util.Objects;
 
 public class BitPosParams implements IParams {
 
@@ -14,12 +14,10 @@ public class BitPosParams implements IParams {
   public BitPosParams() {
   }
 
-  // TODO: deprecate ??
   public BitPosParams(long start) {
     this.start = start;
   }
 
-  // TODO: deprecate ??
   public BitPosParams(long start, long end) {
     this(start);
 
@@ -35,18 +33,12 @@ public class BitPosParams implements IParams {
     return this;
   }
 
-  /**
-   * {@link BitPosParams#start(long) START} must be set for END option.
-   */
+
   public BitPosParams end(long end) {
     this.end = end;
     return this;
   }
 
-  /**
-   * Both {@link BitPosParams#start(long) START} and {@link BitPosParams#end(long) END} both must be
-   * set for MODIFIER option.
-   */
   public BitPosParams modifier(BitCountOption modifier) {
     this.modifier = modifier;
     return this;
